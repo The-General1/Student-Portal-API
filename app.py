@@ -33,7 +33,7 @@ grade_model = api.model('Grade', {
 # Create a list of students to simulate a database
 students = [
     {'id': 1, 'name': 'John', 'age': 18, 'email': 'john@example.com'},
-    {'id': 2, 'name': 'Jane', 'age': 19, 'email': 'jane@example.com'}
+    {'id': 2, 'name': 'Jane', 'age': 29, 'email': 'jane@example.com'}
 ]
 
 # Create a list of courses to simulate a database

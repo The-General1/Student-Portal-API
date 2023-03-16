@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_restx import Api, Resource, fields
 from flask_jwt_extended import JWTManager
+import sqlite3, os
 
 app = Flask(__name__)
 api = Api(app)
@@ -194,6 +195,30 @@ class StudentGrades(Resource):
             if grade['student_id'] == student_id:
                 student_grades.append(grade)
         return student_grades
+    
+conn = sqlite3.connect('students.db')
+c = conn.cursor()
+
+# Create a table for storing student data
+c.execute('''CREATE TABLE IF NOT EXISTS students
+             (id INTEGER PRIMARY KEY, name TEXT, email TEXT, age INTEGER)''')
+
+# Insert a new student record if the ID doesn't already exist
+student_id = 1
+c.execute("SELECT id FROM students WHERE id=?", (student_id,))
+if not c.fetchone():
+    c.execute("INSERT INTO students VALUES (?, ?, ?, ?)", (student_id, 'John Doe', 'john.doe@example.com', 22))
+    conn.commit()
+
+# Retrieve all students from the database
+c.execute("SELECT * FROM students")
+students = c.fetchall()
+
+# Close the database connection
+conn.close()
+
+
+DB_PATH = os.path.join(os.path.dirname(__file__), 'students.db')
 
 
 if __name__ == '__main__':
